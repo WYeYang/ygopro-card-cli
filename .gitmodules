@@ -1,0 +1,6 @@
+[submodule "label-sql-mapping-sdk"]
+	path = label-sql-mapping-sdk
+	url = https://github.com/WYeYang/label-sql-mapping-sdk.git
+[submodule "lsm-ygopro-database"]
+	path = lsm-ygopro-database
+	url = https://github.com/WYeYang/lsm-ygopro-database.git

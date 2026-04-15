@@ -1,0 +1,23 @@
+{
+  "name": "lsm-ygopro-cli",
+  "version": "1.0.0",
+  "description": "游戏王卡片查询CLI工具",
+  "main": "index.js",
+  "bin": {
+    "ygopro": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "lsm",
+    "ygopro",
+    "yu-gi-oh",
+    "cli"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "label-sql-mapping-sdk": "git+https://github.com/user/label-sql-mapping-sdk.git"
+  }
+}
