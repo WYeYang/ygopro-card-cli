@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import * as path from 'path';
-import { YGOProQuery } from 'label-sql-mapping-sdk';
+import { NaturalLanguageQuery } from 'label-sql-mapping-sdk';
 
 const configPath = path.join(__dirname, '..', 'lsm-ygopro-database', 'main.yaml');
 const appConfigPath = path.join(__dirname, '..', 'config.json');
@@ -14,10 +14,10 @@ if (!query) {
 }
 
 (async () => {
-  const ygoproQuery = new YGOProQuery(appConfigPath, configPath);
+  const nlQuery = new NaturalLanguageQuery(appConfigPath, configPath);
   
   try {
-    const result = await ygoproQuery.query(query);
+    const result = await nlQuery.query(query);
     
     console.log('\n========================================');
     console.log('查询结果');
@@ -30,23 +30,23 @@ if (!query) {
       console.log('------------------------------------------------');
     }
     
-    if (result.cards && result.cards.length > 0) {
-      console.log('\n卡片列表:');
+    if (result.data && result.data.length > 0) {
+      console.log('\n查询结果列表:');
       console.log('------------------------------------------------');
-      result.cards.forEach((card: any, index: number) => {
-        console.log(`\n${index + 1}. ${card.name}`);
-        console.log(`   ID: ${card.id}`);
-        if (card.atk) console.log(`   攻击力: ${card.atk}`);
-        if (card.def) console.log(`   防御力: ${card.def}`);
-        if (card.level) console.log(`   等级: ${card.level}`);
-        if (card.desc) {
-          console.log('   效果:');
-          console.log(`   ${card.desc.replace(/\r\n/g, '\n   ')}`);
+      result.data.forEach((item: any, index: number) => {
+        console.log(`\n${index + 1}. ${item.name}`);
+        console.log(`   ID: ${item.id}`);
+        if (item.atk !== undefined) console.log(`   攻击力: ${item.atk}`);
+        if (item.def !== undefined) console.log(`   防御力: ${item.def}`);
+        if (item.level !== undefined) console.log(`   等级: ${item.level}`);
+        if (item.desc) {
+          console.log('   描述:');
+          console.log(`   ${item.desc.replace(/\r\n/g, '\n   ')}`);
         }
       });
       console.log('------------------------------------------------');
     } else {
-      console.log('\n没有找到相关卡片');
+      console.log('\n没有找到相关数据');
     }
     
     if (result.explanation) {
@@ -61,7 +61,7 @@ if (!query) {
     console.error('错误:', (error as Error).message);
   } finally {
     try {
-      await ygoproQuery.close();
+      await nlQuery.close();
     } catch (closeError) {
       console.warn('关闭数据库连接时出错:', (closeError as Error).message);
     }
