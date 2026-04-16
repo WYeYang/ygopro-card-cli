@@ -61,7 +61,7 @@ if (!dbPath) {
 const dbConfig: DBConfig = { type: 'sqlite' as DatabaseType, path: dbPath };
 const sdk = new LSMSDK(configPath, dbConfig);
 const llmManager = new LLMManager(llmConfig);
-const nlpQuery = new NLPQuery(sdk.getDatabase(), llmManager);
+const nlpQuery = new NLPQuery(sdk.getDatabase(), llmManager, configPath);
 
 const query = process.argv.slice(2).join(' ');
 
