@@ -12,6 +12,11 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sqlite3"
+    ]
+  },
   "keywords": [
     "lsm",
     "ygopro",
@@ -21,10 +26,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "better-sqlite3": "^12.9.0",
     "dotenv": "^16.4.5",
     "label-sql-mapping-sdk": "file:./label-sql-mapping-sdk"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.12.7",
     "jest": "^30.3.0",

@@ -2,16 +2,13 @@
 
 import * as path from 'path';
 import * as fs from 'fs';
-import { NaturalLanguageQuery } from 'label-sql-mapping-sdk';
+import { LSMSDK } from 'label-sql-mapping-sdk';
 
-// 使用绝对路径，确保无论从哪里调用都能正确找到配置文件
-// 首先尝试从当前工作目录向上查找配置文件
+// 查找配置文件路径
 let rootDir = process.cwd();
 while (!fs.existsSync(path.join(rootDir, 'config.yaml')) && rootDir !== '/') {
   rootDir = path.dirname(rootDir);
 }
-
-// 如果找不到配置文件，使用 __dirname 作为备选
 if (rootDir === '/') {
   rootDir = path.resolve(__dirname, '..');
 }
@@ -19,114 +16,55 @@ if (rootDir === '/') {
 const configPath = path.join(rootDir, 'lsm-ygopro-database', 'main.yaml');
 const appConfigPath = path.join(rootDir, 'config.yaml');
 
-// 单例模式，确保只创建一个 NaturalLanguageQuery 实例
-let nlQueryInstance: NaturalLanguageQuery | null = null;
-
-/**
- * 获取 NaturalLanguageQuery 实例
- * @returns NaturalLanguageQuery 实例
- */
-function getNLQueryInstance() {
-  if (!nlQueryInstance) {
-    nlQueryInstance = new NaturalLanguageQuery(appConfigPath, configPath);
-  }
-  return nlQueryInstance;
-}
-
-/**
- * 执行自然语言查询并格式化输出结果
- * @param query 自然语言查询
- * @returns 查询结果
- */
-export async function runQuery(query: string) {
-  const nlQuery = getNLQueryInstance();
-  
-  try {
-    const result = await nlQuery.query(query);
-    return result;
-  } catch (error) {
-    throw error;
-  }
-}
-
-/**
- * 关闭 NaturalLanguageQuery 实例
- */
-export async function closeNLQuery() {
-  if (nlQueryInstance) {
-    try {
-      await nlQueryInstance.close();
-      nlQueryInstance = null;
-    } catch (closeError) {
-      console.warn('关闭数据库连接时出错:', (closeError as Error).message);
-    }
-  }
-}
-
-/**
- * 格式化并输出查询结果
- * @param result 查询结果
- */
-export function formatOutput(result: any) {
-  let output = '\n========================================\n';
-  output += '查询结果\n';
-  output += '========================================\n';
-  
-  if (result.sql) {
-    output += '\n生成的SQL:\n';
-    output += '------------------------------------------------\n';
-    output += result.sql + '\n';
-    output += '------------------------------------------------\n';
-  }
-  
-  if (result.data && result.data.length > 0) {
-    output += '\n查询结果列表:\n';
-    output += '------------------------------------------------\n';
-    result.data.forEach((item: any, index: number) => {
-      output += `\n${index + 1}. ${item.name}\n`;
-      output += `   ID: ${item.id}\n`;
-      if (item.atk !== undefined) output += `   攻击力: ${item.atk}\n`;
-      if (item.def !== undefined) output += `   防御力: ${item.def}\n`;
-      if (item.level !== undefined) output += `   等级: ${item.level}\n`;
-      if (item.desc) {
-        output += '   描述:\n';
-        output += `   ${item.desc.replace(/\r\n/g, '\n   ')}\n`;
-      }
-    });
-    output += '------------------------------------------------\n';
-  } else {
-    output += '\n没有找到相关数据\n';
-  }
-  
-  if (result.explanation) {
-    output += '\n说明:\n';
-    output += '------------------------------------------------\n';
-    output += result.explanation + '\n';
-    output += '------------------------------------------------\n';
-  }
-  
-  output += '========================================\n';
-  return output;
-}
-
-// 如果直接运行此文件，则执行查询
+// 命令行入口
 if (require.main === module) {
-  const query = process.argv.slice(2).join(' ');
-  
-  if (!query) {
-    console.error('错误: 请输入查询内容');
-    process.exit(1);
-  }
-  
-  (async () => {
-    try {
-      const result = await runQuery(query);
-      console.log(formatOutput(result));
-    } catch (error) {
-      console.error('错误:', (error as Error).message);
-    } finally {
-      // 程序结束时关闭 NaturalLanguageQuery 实例
-      await closeNLQuery();
+  const args = process.argv.slice(2);
+  const command = args[0];
+
+  if (command === 'query') {
+    const query = args.find(a => a.startsWith('--query='))?.replace('--query=', '');
+    const sql = args.find(a => a.startsWith('--sql='))?.replace('--sql=', '');
+    const page = parseInt(args.find(a => a.startsWith('--page='))?.replace('--page=', '') || '1');
+    const pageSize = parseInt(args.find(a => a.startsWith('--page-size='))?.replace('--page-size=', '') || '20');
+
+    if (!query && !sql) {
+      console.error('错误: 请提供 --query 或 --sql 参数');
+      process.exit(1);
     }
-  })();
+
+    (async () => {
+      try {
+        const sdk = await LSMSDK.fromAppConfig(appConfigPath, configPath);
+        const result = await sdk.query({ query, sql, page, pageSize });
+        console.log(JSON.stringify(result, null, 2));
+      } catch (error) {
+        console.error('错误:', (error as Error).message);
+        process.exit(1);
+      }
+    })();
+
+  } else if (command === '--help' || command === '-h') {
+    console.log('用法:');
+    console.log('  query --query="黑魔导" --page=1 --page-size=20  - 自然语言查询');
+    console.log('  query --sql="SELECT ..." --page=1 --page-size=20  - SQL查询');
+
+  } else if (args.length > 0) {
+    const query = args.join(' ');
+
+    (async () => {
+      try {
+        const sdk = await LSMSDK.fromAppConfig(appConfigPath, configPath);
+        const result = await sdk.query({ query, page: 1, pageSize: 20 });
+        console.log(JSON.stringify(result, null, 2));
+      } catch (error) {
+        console.error('错误:', (error as Error).message);
+        process.exit(1);
+      }
+    })();
+
+  } else {
+    console.log('用法:');
+    console.log('  query --query="黑魔导" --page=1 --page-size=20  - 自然语言查询');
+    console.log('  query --sql="SELECT ..." --page=1 --page-size=20  - SQL查询');
+  }
 }
