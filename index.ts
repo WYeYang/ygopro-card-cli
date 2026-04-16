@@ -4,7 +4,7 @@ import * as path from 'path';
 import { NaturalLanguageQuery } from 'label-sql-mapping-sdk';
 
 const configPath = path.join(__dirname, '..', 'lsm-ygopro-database', 'main.yaml');
-const appConfigPath = path.join(__dirname, '..', 'config.json');
+const appConfigPath = path.join(__dirname, '..', 'config.yaml');
 
 const query = process.argv.slice(2).join(' ');
 
