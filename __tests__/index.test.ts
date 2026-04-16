@@ -78,5 +78,41 @@ describe('主程序测试', () => {
       expect(Array.isArray(result.data)).toBe(true);
       expect(result.explanation).toBeDefined();
     }, 30000); // 设置较长的超时时间，因为需要调用LLM API
+
+    test('应该能够执行攻击600的龙族怪兽查询', async () => {
+      const { runQuery } = await import('../index');
+      const result = await runQuery('攻击600的龙族怪兽');
+      expect(result).toBeDefined();
+      expect(result.sql).toBeDefined();
+      expect(Array.isArray(result.data)).toBe(true);
+      expect(result.explanation).toBeDefined();
+    }, 30000);
+
+    test('应该能够执行光属性怪兽查询', async () => {
+      const { runQuery } = await import('../index');
+      const result = await runQuery('光属性怪兽');
+      expect(result).toBeDefined();
+      expect(result.sql).toBeDefined();
+      expect(Array.isArray(result.data)).toBe(true);
+      expect(result.explanation).toBeDefined();
+    }, 30000);
+
+    test('应该能够执行等级4的战士族怪兽查询', async () => {
+      const { runQuery } = await import('../index');
+      const result = await runQuery('等级4的战士族怪兽');
+      expect(result).toBeDefined();
+      expect(result.sql).toBeDefined();
+      expect(Array.isArray(result.data)).toBe(true);
+      expect(result.explanation).toBeDefined();
+    }, 30000);
+
+    test('应该能够执行攻击力2000以上的怪兽查询', async () => {
+      const { runQuery } = await import('../index');
+      const result = await runQuery('攻击力2000以上的怪兽');
+      expect(result).toBeDefined();
+      expect(result.sql).toBeDefined();
+      expect(Array.isArray(result.data)).toBe(true);
+      expect(result.explanation).toBeDefined();
+    }, 30000);
   });
 });
