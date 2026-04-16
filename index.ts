@@ -8,20 +8,44 @@ const rootDir = path.resolve(__dirname, '..');
 const configPath = path.join(rootDir, 'lsm-ygopro-database', 'main.yaml');
 const appConfigPath = path.join(rootDir, 'config.yaml');
 
+// 单例模式，确保只创建一个 NaturalLanguageQuery 实例
+let nlQueryInstance: NaturalLanguageQuery | null = null;
+
+/**
+ * 获取 NaturalLanguageQuery 实例
+ * @returns NaturalLanguageQuery 实例
+ */
+function getNLQueryInstance() {
+  if (!nlQueryInstance) {
+    nlQueryInstance = new NaturalLanguageQuery(appConfigPath, configPath);
+  }
+  return nlQueryInstance;
+}
+
 /**
  * 执行自然语言查询并格式化输出结果
  * @param query 自然语言查询
  * @returns 查询结果
  */
 export async function runQuery(query: string) {
-  const nlQuery = new NaturalLanguageQuery(appConfigPath, configPath);
+  const nlQuery = getNLQueryInstance();
   
   try {
     const result = await nlQuery.query(query);
     return result;
-  } finally {
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * 关闭 NaturalLanguageQuery 实例
+ */
+export async function closeNLQuery() {
+  if (nlQueryInstance) {
     try {
-      await nlQuery.close();
+      await nlQueryInstance.close();
+      nlQueryInstance = null;
     } catch (closeError) {
       console.warn('关闭数据库连接时出错:', (closeError as Error).message);
     }
@@ -89,6 +113,9 @@ if (require.main === module) {
       console.log(formatOutput(result));
     } catch (error) {
       console.error('错误:', (error as Error).message);
+    } finally {
+      // 程序结束时关闭 NaturalLanguageQuery 实例
+      await closeNLQuery();
     }
   })();
 }
