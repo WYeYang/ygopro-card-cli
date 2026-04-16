@@ -10,7 +10,9 @@ import { LLMConfig } from 'label-sql-mapping-sdk/dist/ai';
 
 dotenv.config();
 
-// 简单的配置管理类
+const configPath = path.join(__dirname, '..', 'lsm-ygopro-database', 'main.yaml');
+const appConfigPath = path.join(__dirname, '..', 'config.json');
+
 class AppConfigManager {
   private config: any;
   private configPath: string;
@@ -43,9 +45,6 @@ class AppConfigManager {
     };
   }
 }
-
-const configPath = path.join(__dirname, '..', 'lsm-ygopro-database', 'main.yaml');
-const appConfigPath = path.join(__dirname, '..', 'config.json');
 
 const appConfigManager = new AppConfigManager(appConfigPath);
 appConfigManager.load();
