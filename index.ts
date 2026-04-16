@@ -1,31 +1,10 @@
 #!/usr/bin/env node
 
 import * as path from 'path';
-import * as dotenv from 'dotenv';
-import { LSMSDK, NLPQuery, LLMManager, AppConfigManager } from 'label-sql-mapping-sdk';
-import { DBConfig } from 'label-sql-mapping-sdk/dist/db';
-import { DatabaseType } from 'label-sql-mapping-sdk/dist/config';
-
-dotenv.config();
+import { YGOProQuery } from 'label-sql-mapping-sdk';
 
 const configPath = path.join(__dirname, '..', 'lsm-ygopro-database', 'main.yaml');
 const appConfigPath = path.join(__dirname, '..', 'config.json');
-
-const appConfigManager = new AppConfigManager(appConfigPath);
-appConfigManager.load();
-
-const dbPath = appConfigManager.getDatabasePath();
-const llmConfig = appConfigManager.getLLMConfig();
-
-if (!dbPath) {
-  console.error('错误: 请在 config.json 中配置数据库文件路径');
-  process.exit(1);
-}
-
-const dbConfig: DBConfig = { type: 'sqlite' as DatabaseType, path: dbPath };
-const sdk = new LSMSDK(configPath, dbConfig);
-const llmManager = new LLMManager(llmConfig);
-const nlpQuery = new NLPQuery(sdk.getDatabase(), llmManager, configPath);
 
 const query = process.argv.slice(2).join(' ');
 
@@ -35,8 +14,10 @@ if (!query) {
 }
 
 (async () => {
+  const ygoproQuery = new YGOProQuery(appConfigPath, configPath);
+  
   try {
-    const result = await nlpQuery.execute({ query });
+    const result = await ygoproQuery.query(query);
     
     console.log('\n========================================');
     console.log('查询结果');
@@ -49,10 +30,10 @@ if (!query) {
       console.log('------------------------------------------------');
     }
     
-    if (result.results && result.results.length > 0) {
+    if (result.cards && result.cards.length > 0) {
       console.log('\n卡片列表:');
       console.log('------------------------------------------------');
-      result.results.forEach((card: any, index: number) => {
+      result.cards.forEach((card: any, index: number) => {
         console.log(`\n${index + 1}. ${card.name}`);
         console.log(`   ID: ${card.id}`);
         if (card.atk) console.log(`   攻击力: ${card.atk}`);
@@ -80,7 +61,7 @@ if (!query) {
     console.error('错误:', (error as Error).message);
   } finally {
     try {
-      await sdk.close();
+      await ygoproQuery.close();
     } catch (closeError) {
       console.warn('关闭数据库连接时出错:', (closeError as Error).message);
     }
