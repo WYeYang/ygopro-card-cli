@@ -1,50 +1,15 @@
 #!/usr/bin/env node
 
 import * as path from 'path';
-import * as fs from 'fs';
 import * as dotenv from 'dotenv';
-import { LSMSDK, NLPQuery, LLMManager } from 'label-sql-mapping-sdk';
+import { LSMSDK, NLPQuery, LLMManager, AppConfigManager } from 'label-sql-mapping-sdk';
 import { DBConfig } from 'label-sql-mapping-sdk/dist/db';
 import { DatabaseType } from 'label-sql-mapping-sdk/dist/config';
-import { LLMConfig } from 'label-sql-mapping-sdk/dist/ai';
 
 dotenv.config();
 
 const configPath = path.join(__dirname, '..', 'lsm-ygopro-database', 'main.yaml');
 const appConfigPath = path.join(__dirname, '..', 'config.json');
-
-class AppConfigManager {
-  private config: any;
-  private configPath: string;
-
-  constructor(configPath: string) {
-    this.configPath = configPath;
-    this.config = {};
-  }
-
-  load() {
-    if (fs.existsSync(this.configPath)) {
-      const content = fs.readFileSync(this.configPath, 'utf8');
-      this.config = JSON.parse(content);
-    }
-  }
-
-  getDatabasePath(): string | null {
-    return this.config.database?.path || null;
-  }
-
-  getLLMConfig(): LLMConfig {
-    const llmConfig = this.config.llm || {};
-    return {
-      provider: 'openai',
-      apiKey: process.env.OPENAI_API_KEY || llmConfig.apiKey || '',
-      baseUrl: process.env.OPENAI_API_URL || llmConfig.apiUrl || 'https://dashscope.aliyuncs.com/compatible-mode/v1',
-      model: process.env.OPENAI_MODEL || llmConfig.model || 'qwen3.5-flash',
-      temperature: llmConfig.temperature || 0.7,
-      maxTokens: llmConfig.maxTokens || 500
-    };
-  }
-}
 
 const appConfigManager = new AppConfigManager(appConfigPath);
 appConfigManager.load();
