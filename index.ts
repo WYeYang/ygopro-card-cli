@@ -1,10 +1,21 @@
 #!/usr/bin/env node
 
 import * as path from 'path';
+import * as fs from 'fs';
 import { NaturalLanguageQuery } from 'label-sql-mapping-sdk';
 
 // 使用绝对路径，确保无论从哪里调用都能正确找到配置文件
-const rootDir = path.resolve(__dirname, '..');
+// 首先尝试从当前工作目录向上查找配置文件
+let rootDir = process.cwd();
+while (!fs.existsSync(path.join(rootDir, 'config.yaml')) && rootDir !== '/') {
+  rootDir = path.dirname(rootDir);
+}
+
+// 如果找不到配置文件，使用 __dirname 作为备选
+if (rootDir === '/') {
+  rootDir = path.resolve(__dirname, '..');
+}
+
 const configPath = path.join(rootDir, 'lsm-ygopro-database', 'main.yaml');
 const appConfigPath = path.join(rootDir, 'config.yaml');
 
