@@ -4,3 +4,6 @@
 [submodule "lsm-ygopro-database"]
 	path = lsm-ygopro-database
 	url = https://github.com/WYeYang/lsm-ygopro-database.git
+[submodule "label-sql-mapping-spec"]
+	path = label-sql-mapping-spec
+	url = https://github.com/WYeYang/label-sql-mapping-spec.git
