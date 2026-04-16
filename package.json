@@ -8,7 +8,9 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [
     "lsm",
@@ -23,7 +25,10 @@
     "label-sql-mapping-sdk": "file:./label-sql-mapping-sdk"
   },
   "devDependencies": {
-    "typescript": "^5.4.5",
-    "@types/node": "^20.12.7"
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20.12.7",
+    "jest": "^30.3.0",
+    "ts-jest": "^29.4.9",
+    "typescript": "^5.4.5"
   }
 }
