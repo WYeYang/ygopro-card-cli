@@ -1,21 +1,13 @@
 {
   "name": "lsm-ygopro-cli",
   "version": "1.0.0",
-  "description": "游戏王卡片查询CLI工具",
-  "main": "dist/index.js",
-  "bin": {
-    "ygopro": "./dist/index.js"
-  },
+  "description": "游戏王卡片查询配置（使用 lsm-cli 运行）",
+  "private": true,
   "scripts": {
-    "build": "tsc",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test": "jest"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "sqlite3"
-    ]
+    "onlyBuiltDependencies": ["better-sqlite3"]
   },
   "keywords": [
     "lsm",
@@ -26,14 +18,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "better-sqlite3": "^12.9.0",
     "dotenv": "^16.4.5",
-    "label-sql-mapping-sdk": "file:./label-sql-mapping-sdk"
+    "label-sql-mapping-sdk": "file:./label-sql-mapping-sdk",
+    "openai": "^6.34.0",
+    "yaml": "^2.3.4"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.12.7",
+    "@types/yaml": "^1.9.7",
     "jest": "^30.3.0",
     "ts-jest": "^29.4.9",
     "typescript": "^5.4.5"
