@@ -7,7 +7,9 @@
     "test": "jest"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["better-sqlite3"]
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
   },
   "keywords": [
     "lsm",
@@ -28,6 +30,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^20.12.7",
     "@types/yaml": "^1.9.7",
+    "better-sqlite3": "^12.9.0",
     "jest": "^30.3.0",
     "ts-jest": "^29.4.9",
     "typescript": "^5.4.5"
