@@ -14,6 +14,9 @@ importers:
       label-sql-mapping-sdk:
         specifier: file:./label-sql-mapping-sdk
         version: lsm-sdk@file:label-sql-mapping-sdk
+      lsm-ygopro-database:
+        specifier: link:lsm-ygopro-database
+        version: link:lsm-ygopro-database
       openai:
         specifier: ^6.34.0
         version: 6.34.0

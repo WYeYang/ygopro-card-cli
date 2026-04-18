@@ -22,6 +22,7 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "label-sql-mapping-sdk": "file:./label-sql-mapping-sdk",
+    "lsm-ygopro-database": "link:lsm-ygopro-database",
     "openai": "^6.34.0",
     "yaml": "^2.3.4"
   },
