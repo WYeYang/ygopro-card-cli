@@ -1,7 +1,7 @@
 {
   "name": "lsm-ygopro-cli",
   "version": "1.0.0",
-  "description": "游戏王卡片查询配置（使用 lsm-cli 运行）",
+  "description": "YGOPRO 卡片查询配置（使用 lsm-cli 运行）",
   "private": true,
   "scripts": {
     "test": "jest"
