@@ -12,8 +12,8 @@ importers:
         specifier: ^16.4.5
         version: 16.6.1
       label-sql-mapping-sdk:
-        specifier: file:./label-sql-mapping-sdk
-        version: lsm-sdk@file:label-sql-mapping-sdk
+        specifier: github:WYeYang/label-sql-mapping-sdk
+        version: lsm-sdk@https://codeload.github.com/WYeYang/label-sql-mapping-sdk/tar.gz/2002e49bfe6cc2614c130233cb4f8cc86d1ec547
       lsm-ygopro-database:
         specifier: link:lsm-ygopro-database
         version: link:lsm-ygopro-database
@@ -1087,8 +1087,9 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lsm-sdk@file:label-sql-mapping-sdk:
-    resolution: {directory: label-sql-mapping-sdk, type: directory}
+  lsm-sdk@https://codeload.github.com/WYeYang/label-sql-mapping-sdk/tar.gz/2002e49bfe6cc2614c130233cb4f8cc86d1ec547:
+    resolution: {tarball: https://codeload.github.com/WYeYang/label-sql-mapping-sdk/tar.gz/2002e49bfe6cc2614c130233cb4f8cc86d1ec547}
+    version: 1.0.0
     hasBin: true
 
   make-dir@4.0.0:
@@ -2827,7 +2828,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lsm-sdk@file:label-sql-mapping-sdk:
+  lsm-sdk@https://codeload.github.com/WYeYang/label-sql-mapping-sdk/tar.gz/2002e49bfe6cc2614c130233cb4f8cc86d1ec547:
     dependencies:
       better-sqlite3: 12.9.0
       commander: 12.1.0
