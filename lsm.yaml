@@ -1,3 +1,6 @@
+database:
+  path: ./lsm-ygopro-database/database/locales/zh-CN/cards.cdb
+
 llm:
   apiKey: ${OPENAI_API_KEY}
   apiUrl: https://dashscope.aliyuncs.com/compatible-mode/v1
